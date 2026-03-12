@@ -2729,6 +2729,7 @@ if (!gotTheLock) {
     headers: Record<string, string>;
     body?: string;
   }) => {
+    console.log(`[api:fetch] ${options.method} ${options.url}`);
     try {
       const response = await session.defaultSession.fetch(options.url, {
         method: options.method,
@@ -2748,14 +2749,17 @@ if (!gotTheLock) {
         data = await response.text();
       }
 
-      return {
+      const result = {
         ok: response.ok,
         status: response.status,
         statusText: response.statusText,
         headers: Object.fromEntries(response.headers.entries()),
         data,
       };
+      console.log(`[api:fetch] ${options.method} ${options.url} -> ${response.status} ${response.statusText}`, typeof data === 'object' ? JSON.stringify(data) : data);
+      return result;
     } catch (error) {
+      console.error(`[api:fetch] ${options.method} ${options.url} -> ERROR:`, error instanceof Error ? error.message : error);
       return {
         ok: false,
         status: 0,
