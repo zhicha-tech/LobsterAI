@@ -444,22 +444,7 @@ export interface ApplyTurnMemoryUpdatesResult {
   skipped: number;
 }
 
-let cachedDefaultSystemPrompt: string | null = null;
-
-const getDefaultSystemPrompt = (): string => {
-  if (cachedDefaultSystemPrompt !== null) {
-    return cachedDefaultSystemPrompt;
-  }
-
-  try {
-    cachedDefaultSystemPrompt = '';
-  } catch (error) {
-    console.warn('Failed to load default system prompt:', error);
-    cachedDefaultSystemPrompt = '';
-  }
-
-  return cachedDefaultSystemPrompt;
-};
+const getDefaultSystemPrompt = (): string => '';
 
 interface CoworkMessageRow {
   id: string;

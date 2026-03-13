@@ -2010,7 +2010,7 @@ if (!gotTheLock) {
     try {
       const normalizedExecutionMode =
         config.executionMode && String(config.executionMode) === 'container'
-          ? 'sandbox'
+          ? 'local'
           : config.executionMode;
       const normalizedAgentEngine = config.agentEngine === 'yd_cowork'
         ? 'yd_cowork'
