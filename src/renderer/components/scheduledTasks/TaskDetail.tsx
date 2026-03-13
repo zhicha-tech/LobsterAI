@@ -58,7 +58,7 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task, onRequestDelete }) => {
   const statusColor = {
     success: 'text-green-500',
     error: 'text-red-500',
-    running: 'text-blue-500',
+    running: 'text-claude-accent dark:text-claude-darkAccent',
   };
 
   const sectionClass = 'rounded-lg border dark:border-claude-darkBorder border-claude-border p-4';

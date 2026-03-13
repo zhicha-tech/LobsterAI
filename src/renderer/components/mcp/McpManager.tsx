@@ -15,7 +15,7 @@ import Tooltip from '../ui/Tooltip';
 import McpServerFormModal from './McpServerFormModal';
 
 const TRANSPORT_BADGE_COLORS: Record<string, string> = {
-  stdio: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+  stdio: 'bg-claude-accent/10 text-claude-accent dark:text-claude-darkAccent',
   sse: 'bg-green-500/10 text-green-600 dark:text-green-400',
   http: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
 };

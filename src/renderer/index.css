@@ -15,7 +15,7 @@
 }
 
 .dark .katex {
-  color: #E4E5E9;
+  color: #F0EDE8;
 }
 
 /* Improve code block styles */
@@ -73,33 +73,33 @@ blockquote {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Cold modern dark mode */
+/* Legal professional dark mode */
 .dark {
   color-scheme: dark;
-  color: #E4E5E9;
-  background-color: #0F1117;
+  color: #F0EDE8;
+  background-color: #1A1612;
 }
 
-/* Cold modern light mode */
+/* Legal professional light mode */
 .light {
   color-scheme: light;
-  color: #1A1D23;
-  background-color: #F8F9FB;
+  color: #2C2416;
+  background-color: #FAF8F5;
 }
 
 /* Ensure all containers inherit theme */
 .dark #root,
 .dark .App,
 .dark main {
-  background-color: #0F1117;
-  color: #E4E5E9;
+  background-color: #1A1612;
+  color: #F0EDE8;
 }
 
 .light #root,
 .light .App,
 .light main {
-  background-color: #F8F9FB;
-  color: #1A1D23;
+  background-color: #FAF8F5;
+  color: #2C2416;
 }
 
 body {
@@ -132,8 +132,8 @@ body {
 
 /* Style for select options to match theme */
 .dark option {
-  background-color: #1A1D27;
-  color: #E4E5E9;
+  background-color: #2A2420;
+  color: #F0EDE8;
 }
 
 .light option {
@@ -232,7 +232,7 @@ select::-ms-expand {
   height: 2px;
   overflow: hidden;
   border-radius: 1px;
-  background: rgba(59,130,246,0.1);
+  background: rgba(139,90,43,0.1);
 }
 .streaming-bar::before {
   content: '';
@@ -242,14 +242,15 @@ select::-ms-expand {
   height: 100%;
   width: 40%;
   border-radius: 1px;
-  background: linear-gradient(90deg, rgba(59,130,246,0.3) 0%, rgba(59,130,246,0.8) 50%, rgba(59,130,246,0.3) 100%);
+  background: linear-gradient(90deg, rgba(139,90,43,0.3) 0%, rgba(139,90,43,0.8) 50%, rgba(139,90,43,0.3) 100%);
   animation: streaming-slide 1.5s ease-in-out infinite;
 }
 .dark .streaming-bar {
-  background: rgba(59,130,246,0.15);
+  background: rgba(201,169,98,0.15);
 }
 .dark .streaming-bar::before {
-  box-shadow: 0 0 6px rgba(59,130,246,0.4);
+  background: linear-gradient(90deg, rgba(201,169,98,0.3) 0%, rgba(201,169,98,0.8) 50%, rgba(201,169,98,0.3) 100%);
+  box-shadow: 0 0 6px rgba(201,169,98,0.4);
 }
 @keyframes streaming-slide {
   0% { left: -40%; }

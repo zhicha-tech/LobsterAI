@@ -60,28 +60,50 @@ const McpServerFormModal: React.FC<McpServerFormModalProps> = ({
         || (registryEntry.descriptionKey ? i18nService.t(registryEntry.descriptionKey) : '');
       setDescription(registryDescription);
       setTransportType(registryEntry.transportType);
-      setCommand(registryEntry.command);
-      // defaultArgs + argPlaceholders
-      const allArgs = [...registryEntry.defaultArgs];
-      if (registryEntry.argPlaceholders) {
-        allArgs.push(...registryEntry.argPlaceholders);
+      setCommand(registryEntry.command || '');
+      // defaultArgs + argPlaceholders (only for stdio)
+      if (registryEntry.transportType === 'stdio') {
+        const allArgs = [...(registryEntry.defaultArgs || [])];
+        if (registryEntry.argPlaceholders) {
+          allArgs.push(...registryEntry.argPlaceholders);
+        }
+        setArgsText(allArgs.join('\n'));
+      } else {
+        setArgsText('');
       }
-      setArgsText(allArgs.join('\n'));
-      // Pre-fill required env keys
+      // For HTTP/SSE type, env keys are treated as headers
+      const headerEntries: { key: string; value: string; required?: boolean }[] = [];
       const envEntries: { key: string; value: string; required?: boolean }[] = [];
-      if (registryEntry.requiredEnvKeys) {
-        for (const k of registryEntry.requiredEnvKeys) {
-          envEntries.push({ key: k, value: '', required: true });
+      if (registryEntry.transportType === 'http' || registryEntry.transportType === 'sse') {
+        // HTTP/SSE: requiredEnvKeys -> headers
+        if (registryEntry.requiredEnvKeys) {
+          for (const k of registryEntry.requiredEnvKeys) {
+            headerEntries.push({ key: k, value: '', required: true });
+          }
         }
-      }
-      if (registryEntry.optionalEnvKeys) {
-        for (const k of registryEntry.optionalEnvKeys) {
-          envEntries.push({ key: k, value: '', required: false });
+        if (registryEntry.optionalEnvKeys) {
+          for (const k of registryEntry.optionalEnvKeys) {
+            headerEntries.push({ key: k, value: '', required: false });
+          }
         }
+        setHeaderRows(headerEntries);
+        setEnvRows([]);
+      } else {
+        // stdio: requiredEnvKeys -> env
+        if (registryEntry.requiredEnvKeys) {
+          for (const k of registryEntry.requiredEnvKeys) {
+            envEntries.push({ key: k, value: '', required: true });
+          }
+        }
+        if (registryEntry.optionalEnvKeys) {
+          for (const k of registryEntry.optionalEnvKeys) {
+            envEntries.push({ key: k, value: '', required: false });
+          }
+        }
+        setEnvRows(envEntries);
+        setHeaderRows([]);
       }
-      setEnvRows(envEntries);
-      setUrl('');
-      setHeaderRows([]);
+      setUrl(registryEntry.url || '');
     } else {
       // Create mode
       setName('');

@@ -31,7 +31,7 @@ interface PendingIMPermission {
 }
 
 const PERMISSION_CONFIRM_TIMEOUT_MS = 60_000;
-const ACCUMULATOR_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
+const ACCUMULATOR_TIMEOUT_MS = 10 * 60 * 1000; // 5 minutes
 const IM_ALLOW_RESPONSE_RE = /^(允许|同意|yes|y)$/i;
 const IM_DENY_RESPONSE_RE = /^(拒绝|不同意|no|n)$/i;
 const IM_ALLOW_OPTION_LABEL = '允许本次操作';

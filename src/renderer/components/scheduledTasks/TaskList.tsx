@@ -124,7 +124,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task, onRequestDelete }) =>
       <div className="flex items-center gap-1.5">
         {/* Running indicator */}
         {task.state.runningAtMs && (
-          <span className="inline-flex items-center text-xs text-blue-500">
+          <span className="inline-flex items-center text-xs text-claude-accent dark:text-claude-darkAccent">
             <svg className="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
               <path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="4" strokeLinecap="round" className="opacity-75" />

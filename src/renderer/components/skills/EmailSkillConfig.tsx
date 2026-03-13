@@ -377,7 +377,7 @@ const EmailSkillConfig: React.FC<EmailSkillConfigProps> = ({ onClose }) => {
 
       {/* Hint */}
       {hintKey && (
-        <div className="text-xs dark:text-claude-darkTextSecondary text-claude-textSecondary bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg px-3 py-2">
+        <div className="text-xs dark:text-claude-darkTextSecondary text-claude-textSecondary bg-claude-accent/5 dark:bg-claude-darkAccent/10 border border-claude-accent/20 dark:border-claude-darkAccent/20 rounded-lg px-3 py-2">
           {i18nService.t(hintKey)}
         </div>
       )}

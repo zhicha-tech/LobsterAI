@@ -26,6 +26,52 @@ function hasPipExecutable(rootDir: string): boolean {
   return PIP_EXECUTABLE_CANDIDATES.some((relPath) => fs.existsSync(path.join(rootDir, relPath)));
 }
 
+function findSystemPython(): { python: string | null; pip: string | null } {
+  if (process.platform !== 'win32') {
+    return { python: null, pip: null };
+  }
+
+  // 尝试通过 where 命令查找系统 Python
+  try {
+    const result = spawnSync('where', ['python'], {
+      encoding: 'utf-8',
+      timeout: 5000,
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
+    if (result.status === 0 && result.stdout) {
+      const pythonPaths = result.stdout.trim().split(/\r?\n/);
+      for (const pythonPath of pythonPaths) {
+        const trimmedPath = pythonPath.trim();
+        if (trimmedPath && fs.existsSync(trimmedPath)) {
+          // 找到了系统 Python，尝试找 pip
+          let pipPath: string | null = null;
+          const pythonDir = path.dirname(trimmedPath);
+          const scriptsDir = path.join(pythonDir, 'Scripts');
+
+          for (const pipCandidate of ['pip.exe', 'pip3.exe', 'pip.cmd']) {
+            const candidate = path.join(scriptsDir, pipCandidate);
+            if (fs.existsSync(candidate)) {
+              pipPath = candidate;
+              break;
+            }
+          }
+
+          return { python: trimmedPath, pip: pipPath };
+        }
+      }
+    }
+  } catch {
+    // 忽略错误，继续尝试其他方式
+  }
+
+  return { python: null, pip: null };
+}
+
+function checkSystemPythonAvailable(): boolean {
+  const systemPython = findSystemPython();
+  return systemPython.python !== null;
+}
+
 function hasPipSupport(rootDir: string): boolean {
   const hasCommand = hasPipExecutable(rootDir);
   const hasModuleShim =
@@ -270,6 +316,11 @@ export async function ensurePythonRuntimeReady(): Promise<{ success: boolean; er
 
     const bundledRoot = getBundledPythonRoot();
     if (!bundledRoot) {
+      // 检查系统是否安装了 Python
+      if (checkSystemPythonAvailable()) {
+        console.log('[python-runtime] Bundled runtime not found, falling back to system Python');
+        return { success: true };
+      }
       const message = 'Bundled python runtime not found in application resources.';
       console.error(`[python-runtime] ${message}`);
       return { success: false, error: message };
@@ -376,6 +427,13 @@ export async function ensurePythonPipReady(): Promise<{ success: boolean; error?
         console.log('[python-runtime] ensurepip successfully restored pip in user runtime');
         return { success: true };
       }
+    }
+
+    // 检查系统 pip 是否可用
+    const systemPython = findSystemPython();
+    if (systemPython.pip) {
+      console.log('[python-runtime] Bundled pip unavailable, falling back to system pip');
+      return { success: true };
     }
 
     const errorDetail = bootstrapResult.detail ? ` (${bootstrapResult.detail})` : '';

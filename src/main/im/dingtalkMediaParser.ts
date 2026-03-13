@@ -62,7 +62,13 @@ function getMediaTypeByExtension(filePath: string): 'image' | 'audio' | 'video' 
 function cleanPath(rawPath: string): string {
   let path = rawPath.replace(/\\ /g, ' ');
   if (path.startsWith('file:///')) {
-    path = decodeURIComponent(path.replace('file://', ''));
+    // Remove 'file:///' but keep the absolute path format
+    path = decodeURIComponent(path.substring(8));
+
+    // On Windows, if path starts with /X:/ format, remove the leading slash
+    if (process.platform === 'win32' && /^\/[a-zA-Z]:/.test(path)) {
+      path = path.substring(1);
+    }
   }
   return path;
 }

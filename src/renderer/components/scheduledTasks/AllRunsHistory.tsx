@@ -16,7 +16,7 @@ function formatDuration(ms: number | null): string {
 const statusConfig: Record<string, { label: string; color: string }> = {
   success: { label: 'scheduledTasksStatusSuccess', color: 'text-green-500' },
   error: { label: 'scheduledTasksStatusError', color: 'text-red-500' },
-  running: { label: 'scheduledTasksStatusRunning', color: 'text-blue-500' },
+  running: { label: 'scheduledTasksStatusRunning', color: 'text-claude-accent dark:text-claude-darkAccent' },
 };
 
 const AllRunsHistory: React.FC = () => {
@@ -81,7 +81,7 @@ const AllRunsHistory: React.FC = () => {
             <div className="text-sm dark:text-claude-darkText text-claude-text truncate">
               {run.taskName}
               {run.status === 'running' && (
-                <svg className="inline-block w-3 h-3 ml-1.5 animate-spin text-blue-500" viewBox="0 0 24 24" fill="none">
+                <svg className="inline-block w-3 h-3 ml-1.5 animate-spin text-claude-accent dark:text-claude-darkAccent" viewBox="0 0 24 24" fill="none">
                   <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
                   <path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="4" strokeLinecap="round" className="opacity-75" />
                 </svg>

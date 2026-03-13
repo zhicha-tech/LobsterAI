@@ -965,11 +965,11 @@ const IMSettings: React.FC = () => {
         {activePlatform === 'nim' && (
           <div className="space-y-3">
             {/* How to get NIM credentials */}
-            <div className="mb-3 p-3 rounded-lg bg-blue-50/50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800/30">
-              <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+            <div className="mb-3 p-3 rounded-lg bg-claude-accent/5 dark:bg-claude-darkAccent/10 border border-claude-accent/20 dark:border-claude-darkAccent/20">
+              <p className="text-xs text-claude-accentHover dark:text-claude-darkAccentLight leading-relaxed">
                 {i18nService.t('nimCredentialsGuide') || '如何获取云信凭证：'}
               </p>
-              <ol className="mt-2 text-xs text-blue-600 dark:text-blue-400 space-y-1 list-decimal list-inside">
+              <ol className="mt-2 text-xs text-claude-accent dark:text-claude-darkAccent space-y-1 list-decimal list-inside">
                 <li>{i18nService.t('nimGuideStep1') || '登录网易云信控制台（yunxin.163.com）'}</li>
                 <li>{i18nService.t('nimGuideStep2') || '创建或选择应用，获取 App Key'}</li>
                 <li>{i18nService.t('nimGuideStep3') || '在"账号数-子功能配置"中创建 IM 账号（accid）'}</li>

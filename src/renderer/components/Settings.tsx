@@ -2149,7 +2149,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
               )}
 
               {coworkSandboxDisabled && !coworkSandboxStatus?.supported && (
-                <div className="text-xs text-blue-500 dark:text-blue-400">
+                <div className="text-xs text-claude-accent dark:text-claude-darkAccent">
                   {i18nService.t('coworkSandboxSelectionBlocked')}
                 </div>
               )}

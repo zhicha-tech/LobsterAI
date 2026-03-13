@@ -2,15 +2,15 @@ import { configService } from './config';
 
 type ThemeType = 'light' | 'dark' | 'system';
 
-// Cold modern color palette
+// Legal professional color palette (律师/法官专业配色)
 const COLORS = {
   light: {
-    bg: '#F8F9FB',
-    text: '#1A1D23',
+    bg: '#FAF8F5',
+    text: '#2C2416',
   },
   dark: {
-    bg: '#0F1117',
-    text: '#E4E5E9',
+    bg: '#1A1612',
+    text: '#F0EDE8',
   },
 };
 

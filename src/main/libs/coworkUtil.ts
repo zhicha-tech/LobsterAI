@@ -1105,6 +1105,26 @@ function applyPackagedEnvOverrides(env: Record<string, string | undefined>): voi
       env.PATH = [devBinDir, env.PATH].filter(Boolean).join(delimiter);
       coworkLog('INFO', 'applyPackagedEnvOverrides', `Dev mode: prepended node_modules/.bin to PATH: ${devBinDir}`);
     }
+
+    // 在开发模式下也需要创建 Electron Node shim，让 bash 环境能找到 node 命令
+    const hasSystemNode = hasCommandInEnv('node', env);
+    const hasSystemNpx = hasCommandInEnv('npx', env);
+    const hasSystemNpm = hasCommandInEnv('npm', env);
+    const shouldInjectShim = !(hasSystemNode && hasSystemNpx && hasSystemNpm);
+    if (shouldInjectShim) {
+      const npmBinDir = join(app.getAppPath(), 'node_modules', 'npm', 'bin');
+      const shimDir = ensureElectronNodeShim(electronNodeRuntimePath, npmBinDir);
+      if (shimDir) {
+        env.PATH = [shimDir, env.PATH].filter(Boolean).join(delimiter);
+        env.LOBSTERAI_NODE_SHIM_ACTIVE = '1';
+        coworkLog('INFO', 'applyPackagedEnvOverrides', `Dev mode: Injected Electron Node/npx/npm shim PATH entry: ${shimDir}`);
+        if (process.platform === 'win32') {
+          ensureWindowsOriginalPath(env);
+        }
+      }
+    } else {
+      coworkLog('INFO', 'applyPackagedEnvOverrides', 'Dev mode: System node/npx/npm detected; skipped Electron node shim injection');
+    }
     return;
   }
 

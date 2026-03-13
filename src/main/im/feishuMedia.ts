@@ -205,12 +205,18 @@ export function resolveFeishuMediaPath(rawPath: string): string {
 
   // Handle file:// protocol
   if (resolved.startsWith('file:///')) {
-    resolved = decodeURIComponent(resolved.replace('file://', ''));
+    // Remove 'file:///' but keep the absolute path format
+    resolved = decodeURIComponent(resolved.substring(8));
+
+    // On Windows, if path starts with /X:/ format, remove the leading slash
+    if (process.platform === 'win32' && /^\/[a-zA-Z]:/.test(resolved)) {
+      resolved = resolved.substring(1);
+    }
   }
 
   // Handle ~ home directory
   if (resolved.startsWith('~')) {
-    resolved = resolved.replace('~', process.env.HOME || '');
+    resolved = resolved.replace('~', process.env.HOME || process.env.USERPROFILE || '');
   }
 
   return resolved;

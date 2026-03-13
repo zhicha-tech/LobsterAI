@@ -18,7 +18,7 @@ function formatDuration(ms: number | null): string {
 const statusIcons: Record<string, { icon: string; color: string }> = {
   success: { icon: '✓', color: 'text-green-500' },
   error: { icon: '✗', color: 'text-red-500' },
-  running: { icon: '●', color: 'text-blue-500' },
+  running: { icon: '●', color: 'text-claude-accent dark:text-claude-darkAccent' },
 };
 
 const TaskRunHistory: React.FC<TaskRunHistoryProps> = ({ taskId, runs }) => {

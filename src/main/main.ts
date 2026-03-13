@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, session, nativeTheme, dialog, shell, nativeImage, systemPreferences, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, session, nativeTheme, dialog, shell, nativeImage, systemPreferences, Menu, globalShortcut } from 'electron';
 import type { WebContents } from 'electron';
 import path from 'path';
 import fs from 'fs';
@@ -2539,6 +2539,21 @@ if (!gotTheLock) {
 
       // Start the scheduler
       getScheduler().start();
+
+      // 注册 Ctrl+Shift+I 快捷键来切换 DevTools
+      const registered = globalShortcut.register('CommandOrControl+Shift+I', () => {
+        console.log('[Main] DevTools shortcut triggered');
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          if (mainWindow.webContents.isDevToolsOpened()) {
+            console.log('[Main] Closing DevTools');
+            mainWindow.webContents.closeDevTools();
+          } else {
+            console.log('[Main] Opening DevTools');
+            mainWindow.webContents.openDevTools();
+          }
+        }
+      });
+      console.log('[Main] DevTools shortcut registered:', registered);
     });
   };
 
@@ -2547,6 +2562,8 @@ if (!gotTheLock) {
 
   const runAppCleanup = async (): Promise<void> => {
     console.log('[Main] App is quitting, starting cleanup...');
+    // 注销所有全局快捷键
+    globalShortcut.unregisterAll();
     destroyTray();
     skillManager?.stopWatching();
 

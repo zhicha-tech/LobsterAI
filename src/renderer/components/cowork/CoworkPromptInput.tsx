@@ -557,7 +557,7 @@ const CoworkPromptInput = React.forwardRef<CoworkPromptInputRef, CoworkPromptInp
                 title={attachment.path}
               >
                 {attachment.isImage ? (
-                  <PhotoIcon className="h-3.5 w-3.5 flex-shrink-0 text-blue-500" />
+                  <PhotoIcon className="h-3.5 w-3.5 flex-shrink-0 text-claude-accent dark:text-claude-darkAccent" />
                 ) : (
                   <PaperClipIcon className="h-3.5 w-3.5 flex-shrink-0" />
                 )}
