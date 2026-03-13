@@ -104,11 +104,29 @@ async function generateImage(prompt, options = {}) {
         const imageData = imagePart.inlineData.data;
 
         // Save image
-        const filePath = outputPath || `generated-${Date.now()}.png`;
+        // 如果没有提供输出路径，使用临时目录创建绝对路径
+        let filePath = outputPath;
+        if (!filePath) {
+            const tmpDir = os.tmpdir();
+            filePath = path.join(tmpDir, `yunwu-image-${Date.now()}.png`);
+        }
+        // 确保返回绝对路径
+        if (!path.isAbsolute(filePath)) {
+            filePath = path.resolve(filePath);
+        }
         const buffer = Buffer.from(imageData, 'base64');
         fs.writeFileSync(filePath, buffer);
 
-        return filePath;
+        // 返回 file:/// 协议格式的 URL
+        const normalizedPath = filePath.replace(/\\/g, '/');
+        if (/^[A-Za-z]:/.test(normalizedPath)) {
+            // Windows 路径: C:/... -> file:///C:/...
+            return `file:///${normalizedPath}`;
+        } else if (normalizedPath.startsWith('/')) {
+            // Unix 路径: /Users/... -> file:///Users/...
+            return `file://${normalizedPath}`;
+        }
+        return `file://${normalizedPath}`;
     } catch (error) {
         throw new Error(`Failed to generate image: ${error.message}`);
     }

@@ -2359,11 +2359,11 @@ if (!gotTheLock) {
         "default-src 'self'",
         isDev ? `script-src 'self' 'unsafe-inline' http://localhost:${devPort} ws://localhost:${devPort}` : "script-src 'self'",
         "style-src 'self' 'unsafe-inline'",
-        "img-src 'self' data: https: http:",
+        "img-src 'self' data: https: http: file:",
         // 允许连接到所有域名，不做限制
         "connect-src *",
         "font-src 'self' data:",
-        "media-src 'self'",
+        "media-src 'self' file:",
         "worker-src 'self' blob:",
         "frame-src 'self'"
       ];

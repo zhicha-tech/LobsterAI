@@ -28,14 +28,17 @@ export function buildIMMediaInstruction(_imSettings: IMSettings): string {
 
 在回复文本中使用以下 Markdown 格式嵌入本地文件路径，系统会自动检测并将其作为对应类型的媒体消息发送给用户：
 
-- **图片**: \`![描述文字](/absolute/path/to/image.png)\`
-- **音频**: \`[音频文件](/absolute/path/to/audio.mp3)\`
-- **视频**: \`[视频文件](/absolute/path/to/video.mp4)\`
-- **文件**: \`[文件名](/absolute/path/to/document.pdf)\`
+- **图片**: \`![描述文字](file:///absolute/path/to/image.png)\`
+- **音频**: \`[音频文件](file:///absolute/path/to/audio.mp3)\`
+- **视频**: \`[视频文件](file:///absolute/path/to/video.mp4)\`
+- **文件**: \`[文件名](file:///absolute/path/to/document.pdf)\`
 
-也可以直接在文本中写出文件的绝对路径（裸路径），系统同样能识别：
-- \`/Users/xxx/output/chart.png\`
-- \`/tmp/result.xlsx\`
+**重要**: 必须使用 \`file:///\` 协议前缀来引用本地文件。
+
+### 路径格式示例
+
+- **Windows**: \`file:///C:/Users/xxx/output/image.png\`（注意：使用正斜杠 /）
+- **macOS/Linux**: \`file:///Users/xxx/output/image.png\` 或 \`file:///tmp/result.xlsx\`
 
 ### 支持的文件类型
 
@@ -46,7 +49,7 @@ export function buildIMMediaInstruction(_imSettings: IMSettings): string {
 
 ### 使用规则
 
-1. **必须使用绝对路径**，如 \`/Users/...\`、\`/tmp/...\` 等。
+1. **必须使用 file:/// 协议**，如 \`file:///C:/Users/...\`（Windows）或 \`file:///Users/...\`（macOS）。
 2. 文件必须是你通过工具创建或已确认存在于本地磁盘的文件。
 3. 你可以在同一条回复中混合文本和多个媒体标记。系统会先发送纯文本部分，再逐个发送媒体文件。
 4. 当用户要求你生成图片、图表、文档等并发送时，先用工具将内容写入本地文件，然后在回复中引用该文件路径即可。

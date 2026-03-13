@@ -18,7 +18,7 @@ import {
 } from './types';
 import { uploadMediaToDingTalk, detectMediaType, getOapiAccessToken } from './dingtalkMedia';
 import { downloadDingtalkFile, getDefaultMimeType, mapDingtalkMediaType } from './dingtalkMediaDownload';
-import { parseMediaMarkers } from './dingtalkMediaParser';
+import { parseMediaMarkers, stripMediaMarkers } from './dingtalkMediaParser';
 import { createUtf8JsonBody, JSON_UTF8_CONTENT_TYPE, stringifyAsciiJson } from './jsonEncoding';
 import { sanitizeLogArg, sanitizeLogArgs } from './logSanitizer';
 
@@ -725,8 +725,11 @@ export class DingTalkGateway extends EventEmitter {
       }
     }
 
-    // 发送完整的原始文本（保留 markdown 格式，不移除媒体标记）
-    await this.sendBySession(sessionWebhook, text, options);
+    // 发送移除媒体标记后的文本
+    const cleanedText = stripMediaMarkers(text, uploadedMarkers);
+    if (cleanedText.trim()) {
+      await this.sendBySession(sessionWebhook, cleanedText, options);
+    }
   }
 
   /**

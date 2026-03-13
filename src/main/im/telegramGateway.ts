@@ -17,7 +17,7 @@ import {
   DEFAULT_TELEGRAM_STATUS,
 } from './types';
 import { extractMediaFromMessage, cleanupOldMediaFiles } from './telegramMedia';
-import { parseMediaMarkers } from './dingtalkMediaParser';
+import { parseMediaMarkers, stripMediaMarkers } from './dingtalkMediaParser';
 import { fetchWithSystemProxy } from './http';
 
 /**
@@ -529,9 +529,8 @@ export class TelegramGateway extends EventEmitter {
           }
         }
 
-        // Strip media markers from text if we have valid files
-        // 注意：保留原始 markdown 文本，不移除媒体标记
-        const textContent = text;
+        // 移除已处理的媒体标记后发送文本
+        const textContent = validFiles.length > 0 ? stripMediaMarkers(text, markers) : text;
 
         // Send media files first (with retry logic)
         const MAX_RETRIES = 3;
@@ -969,8 +968,8 @@ export class TelegramGateway extends EventEmitter {
       }
     }
 
-    // Send text content with splitting
-    const textContent = text.trim();
+    // Send text content with splitting (remove media markers if files were sent)
+    const textContent = validFiles.length > 0 ? stripMediaMarkers(text, markers).trim() : text.trim();
     if (textContent) {
       const MAX_LENGTH = 4000;
       const chunks = this.splitMessage(textContent, MAX_LENGTH);

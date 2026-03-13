@@ -26,7 +26,7 @@ import {
   getFeishuDefaultMimeType,
   mapFeishuMediaType,
 } from './feishuMedia';
-import { parseMediaMarkers } from './dingtalkMediaParser';
+import { parseMediaMarkers, stripMediaMarkers } from './dingtalkMediaParser';
 import { stringifyAsciiJson } from './jsonEncoding';
 import { isSystemProxyEnabled, resolveSystemProxyUrl } from '../libs/systemProxy';
 
@@ -804,8 +804,11 @@ export class FeishuGateway extends EventEmitter {
       }
     }
 
-    // Send the text message (keep full text for context)
-    await this.sendMessage(to, text, replyToMessageId);
+    // 移除已处理的媒体标记后发送文本消息
+    const cleanedText = stripMediaMarkers(text, markers);
+    if (cleanedText.trim()) {
+      await this.sendMessage(to, cleanedText, replyToMessageId);
+    }
   }
 
   /**

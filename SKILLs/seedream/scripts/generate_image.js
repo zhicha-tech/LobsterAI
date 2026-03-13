@@ -7,6 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const https = require('https');
 const http = require('http');
 const { URL } = require('url');
@@ -32,6 +33,18 @@ function printInfo(message, noNewline = false) {
   } else {
     console.error(message);
   }
+}
+
+function toFileUrl(filePath) {
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  if (/^[A-Za-z]:/.test(normalizedPath)) {
+    // Windows 路径: C:/... -> file:///C:/...
+    return `file:///${normalizedPath}`;
+  } else if (normalizedPath.startsWith('/')) {
+    // Unix 路径: /Users/... -> file:///Users/...
+    return `file://${normalizedPath}`;
+  }
+  return `file://${normalizedPath}`;
 }
 
 function validateConfig() {
@@ -387,7 +400,7 @@ async function main() {
     sequential: false,
     'max-images': 4,
     search: false,
-    output: 'generated_image.png'
+    output: path.join(os.tmpdir(), `seedream-image-${Date.now()}.png`)
   };
 
   // 解析命令行参数
@@ -414,6 +427,11 @@ async function main() {
   if (!options.prompt) {
     printError('缺少必需参数: --prompt');
     process.exit(1);
+  }
+
+  // 确保 output 路径是绝对路径
+  if (!path.isAbsolute(options.output)) {
+    options.output = path.resolve(options.output);
   }
 
   // 验证配置
@@ -475,7 +493,7 @@ async function main() {
       printInfo('='.repeat(50));
 
       console.log('图片生成成功！');
-      console.log(`文件路径: ${path.resolve(options.output)}`);
+      console.log(`文件路径: ${toFileUrl(options.output)}`);
       console.log(`尺寸: ${data[0].size || 'N/A'}`);
       if (result.usage) {
         console.log(`生成图片数: ${result.usage.generated_images || 1}`);
@@ -508,7 +526,7 @@ async function main() {
       printInfo('='.repeat(50));
 
       console.log(`组图生成成功！共 ${data.length} 张`);
-      console.log(`输出目录: ${path.resolve(parent)}`);
+      console.log(`输出目录: ${toFileUrl(parent)}`);
       console.log(`文件命名: ${stem}_1${suffix} ~ ${stem}_${data.length}${suffix}`);
       if (result.usage) {
         console.log(`Token消耗: ${result.usage.total_tokens || 'N/A'}`);

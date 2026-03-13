@@ -57,7 +57,7 @@ function getMediaTypeByExtension(filePath: string): 'image' | 'audio' | 'video' 
 }
 
 /**
- * 清理路径（移除 file:// 协议，处理转义空格）
+ * 清理路径（移除 file:// 协议，处理转义空格，统一路径分隔符）
  */
 function cleanPath(rawPath: string): string {
   let path = rawPath.replace(/\\ /g, ' ');
@@ -70,6 +70,8 @@ function cleanPath(rawPath: string): string {
       path = path.substring(1);
     }
   }
+  // 统一路径分隔符为正斜杠，避免同一文件因路径格式不同而被重复处理
+  path = path.replace(/\\/g, '/');
   return path;
 }
 
