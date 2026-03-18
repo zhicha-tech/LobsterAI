@@ -12,6 +12,7 @@
     "feishu-docx": { "order": 48, "enabled": true },
     "ocr-extractor": { "order": 49, "enabled": true },
     "remotion": { "order": 50, "enabled": true },
+    "lawyer-wechat-lead-images": { "order": 51, "enabled": true },
     "aliyun-oss": { "order": 51, "enabled": true },
     "develop-web-game": { "order": 60, "enabled": true },
     "playwright": { "order": 70, "enabled": true },
